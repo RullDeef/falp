@@ -1,0 +1,24 @@
+/*****************************************************************************
+
+		Copyright (c) My Company
+
+ Project:  DEF_14-17
+ FileName: DEF_14-17.PRO
+ Purpose: No description
+ Written by: Visual Prolog
+ Comments:
+******************************************************************************/
+
+include "def_14-17.inc"
+
+predicates
+
+  def_14-17()
+
+clauses
+
+  def_14-17():-!.
+
+goal
+
+  def_14-17().

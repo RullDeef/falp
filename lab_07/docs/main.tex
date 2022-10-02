@@ -1,0 +1,177 @@
+\chapter{Практические задания}
+
+\section{Задание 1}
+
+Написать хвостовую рекурсивную функцию \texttt{my-reverse}, которая развернет верхний
+уровень своего списка-аргумента \texttt{lst}.
+
+\begin{lstlisting}[language=Lisp]
+(defun my-reverse (lst)
+	(funcall #'(lambda (fn) (funcall fn fn lst nil))
+		(lambda (self lst res)
+			(cond ((null lst) res)
+				(t (funcall self self (cdr lst) (cons (car lst) res)))))))
+\end{lstlisting}
+
+\section{Задание 2}
+
+Написать функцию, которая возвращает первый элемент списка-аргумента, который сам является непустым списком.
+
+\begin{lstlisting}[language=Lisp]
+(defun get-first-list (lst)
+	(cond ((null lst) nil)
+		((and (listp (car lst)) (not (null (car lst))))
+			(car lst))
+		(t (get-first-list (cdr lst)))))
+\end{lstlisting}
+
+\section{Задание 3}
+
+Написать функцию, которая выбирает из заданного списка только те числа, которые больше 1 и меньше 10.
+(Вариант: между двумя заданными границами).
+
+\begin{lstlisting}[language=Lisp]
+(defun num-between (num low high)
+	(and (< low num) (< num high)))
+	
+(defun select-between (lst low high)
+	(cond
+		((null lst) nil)
+		((and (< low (car lst)) (< (car lst) high))
+			(cons (car lst) (select-between (cdr lst) low high)))
+		(t (select-between (cdr lst) low high))))
+\end{lstlisting}
+
+\clearpage
+
+\section{Задание 4}
+
+Напишите рекурсивную функцию, которая умножает на заданное число-аргумент все
+числа из заданного списка-аргумента, когда
+
+\begin{enumerate}[a)]
+	\item все элементы списка -- числа,
+	\item элементы списка -- любые объекты.
+\end{enumerate}
+
+\begin{lstlisting}[language=Lisp]
+(defun mult-a (num lst)
+	(cond
+		((null lst) nil)
+		(t (cons ( * num (car lst)) (mult-a num (cdr lst))))))
+
+(defun mult-b (num lst)
+	(cond
+		((null lst) nil)
+		((numberp (car lst))
+			(cons ( * num (car lst)) (mult-b num (cdr lst))))
+		(t (cons (car lst) (mult-b num (cdr lst))))))
+\end{lstlisting}
+
+\section{Задание 5}
+
+Напишите функцию, \texttt{select-between}, которая из списка-аргумента, содержащего только числа, выбирает только те, которые расположены между двумя указанными границами-аргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел
+(+2 балла)).
+
+\begin{lstlisting}[language=Lisp]
+(defun num-between (num low high)
+	(and (< low num) (< num high)))
+	
+(defun select-between (lst low high)
+	(cond
+		((null lst) nil)
+		((and (< low (car lst)) (< (car lst) high))
+			(cons (car lst) (select-between (cdr lst) low high)))
+		(t (select-between (cdr lst) low high))))
+\end{lstlisting}
+
+\clearpage
+
+\section{Задание 6}
+
+Написать рекурсивную версию (с именем \texttt{rec-add}) вычисления суммы чисел заданного списка:
+
+\begin{enumerate}[a)]
+	\item одноуровнего смешанного,
+	\item структурированного.
+\end{enumerate}
+
+\begin{lstlisting}[language=Lisp]
+(defun __rec-add-a (lst sum)
+	(cond
+		((null lst) sum)
+		((numberp (car lst))
+			(__rec-add-a (cdr lst) (+ sum (car lst))))
+		(t (__rec-add-a (cdr lst) sum))))
+
+(defun rec-add-a (lst)
+	(__rec-add-a lst 0))
+
+(defun __rec-add-b (lst sum)
+	(cond
+		((null lst) sum)
+		((numberp (car lst))
+			(__rec-add-b (cdr lst) (+ sum (car lst))))
+		((listp (car lst))
+			(__rec-add-b (cdr lst) (+ sum (rec-add-b (car lst)))))
+		(t (__rec-add-b (cdr lst) sum))))
+
+(defun rec-add-b (lst)
+	(__rec-add-b lst 0))
+\end{lstlisting}
+
+\section{Задание 7}
+
+Написать рекурсивную версию с именем \texttt{recnth} функции \texttt{nth}.
+
+\begin{lstlisting}[language=Lisp]
+(defun recnth (index lst)
+	(cond
+		((null lst) nil)
+		((eql index 0) (car lst))
+		(t (recnth (- index 1) (cdr lst)))))
+\end{lstlisting}
+
+\clearpage
+
+\section{Задание 8}
+
+Написать рекурсивную функцию \texttt{allodd}, которая возвращает \texttt{t} когда все элементы списка
+нечетные.
+
+\begin{lstlisting}[language=Lisp]
+(defun allodd (lst)
+	(cond
+		((null lst) t)
+		((evenp (car lst)) nil)
+		(t (allodd (cdr lst)))))
+\end{lstlisting}
+
+\section{Задание 9}
+
+Написать рекурсивную функцию, которая возвращает первое нечетное число из списка (структурированного), возможно создавая некоторые вспомогательные функции.
+
+\begin{lstlisting}[language=Lisp]
+(defun get-first-odd (lst)
+	(cond
+		((null lst) nil)
+		((and (numberp (car lst)) (oddp (car lst)))
+			(car lst))
+		((listp (car lst))
+			(or (get-first-odd (car lst))
+				(get-first-odd (cdr lst))))
+		(t (get-first-odd (cdr lst)))))
+\end{lstlisting}
+
+\section{Задание 10}
+
+Используя cons-дополняемую рекурсию с одним тестом завершения,
+написать функцию которая получает как аргумент список чисел, а возвращает список
+квадратов этих чисел в том же порядке.
+
+\begin{lstlisting}[language=Lisp]
+(defun squares (lst)
+	(if (null lst) nil
+		(cons ( * (car lst) (car lst))
+			(squares (cdr lst)))))
+\end{lstlisting}

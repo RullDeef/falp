@@ -1,0 +1,151 @@
+\chapter{Практические задания}
+
+\section{Задание 1}
+
+Написать функцию, которая принимает целое число и возвращает первое
+четное число, не меньшее аргумента.
+
+\begin{lstlisting}[language=Lisp]
+; вариант 1
+(defun first-even-ge (num)
+	(if (= (mod num 2) 0)
+		num
+		(+ num 1)
+	)
+)
+
+; вариант 2
+(defun first-even-ge (num)
+	(+ num (mod num 2))
+)
+\end{lstlisting}
+
+\section{Задание 2}
+
+Написать функцию, которая принимает число и возвращает число
+того же знака, но с модулем на 1 больше модуля аргумента.
+
+\begin{lstlisting}[language=Lisp]
+; вариант 1
+(defun plus-mod (num)
+	(if (< num 0)
+		(- num 1)
+		(+ num 1)
+	)
+)
+
+; вариант 2
+(defun plus-mod (num)
+	((if (< num 0) - +) num 1)
+)
+\end{lstlisting}
+
+\clearpage
+
+\section{Задание 3}
+
+Написать функцию, которая принимает два числа и возвращает
+список из этих чисел, расположенный по возрастанию.
+
+\begin{lstlisting}[language=Lisp]
+(defun sorted-2list (a b)
+	(if (< a b)
+		(list a b)
+		(list b a)
+	)
+)
+\end{lstlisting}
+
+\section{Задание 4}
+
+Написать функцию, которая принимает три числа и возвращает \texttt{T} только
+тогда, когда первое число расположено между вторым и третьим.
+
+\begin{lstlisting}[language=Lisp]
+(defun betweenp (a b c)
+	(or (and (< b a) (< a c))
+		(and (< c a) (< a b))
+	)
+)
+\end{lstlisting}
+
+\section{Задание 5}
+
+Каков результат вычисления следующих выражений?
+
+\begin{table}
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		\textbf{Выражение} & \textbf{Результат} \\
+		\hline
+		\texttt{(and 'fee 'fie 'foe)} & \texttt{FOE} \\
+		\hline
+		\texttt{(or nil 'fie 'foe)} & \texttt{FIE} \\
+		\hline
+		\texttt{(and (equal 'abc 'abc) 'yes)} & \texttt{YES} \\
+		\hline
+		\texttt{(or 'fee 'fie 'foe)} & \texttt{FEE} \\
+		\hline
+		\texttt{(and nil 'fie 'foe)} & \texttt{NIL} \\
+		\hline
+		\texttt{(or (equal 'abc 'abc) 'yes)} & \texttt{T} \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\section{Задание 6}
+
+Написать предикат, который принимает два числа-аргумента и возвращает\texttt{T}, если первое число не меньше второго.
+
+\begin{lstlisting}[language=Lisp]
+(defun gr-eq (a b)
+	(>= a b)
+)
+\end{lstlisting}
+
+\section{Задание 7}
+
+Какой из следующих двух вариантов предиката ошибочен и почему?
+
+\begin{enumerate}
+	\item \texttt{(defun pred1 (x) (and (numberp x) (plusp x)))}
+	\item \texttt{(defun pred2 (x) (and (plusp x) (numberp x)))}
+\end{enumerate}
+
+Второй вариант ошибочен, так как при вычислении формы \texttt{and} первым будет вычисляться предикат \texttt{plusp} и в случаях, когда аргумент \texttt{x} не будет являться числом, возникнет ошибка.
+
+\section{Задание 8}
+
+Решить задачу 4, используя для ее решения конструкции\texttt{IF}, \texttt{COND}, \texttt{AND}/\texttt{OR}.
+
+\begin{lstlisting}[language=Lisp]
+; IF
+(defun betweenp (a b c)
+	(if (< b c)
+		(if (< b a) (< a c))
+		(if (< c a) (< a b))
+	)
+)
+
+; COND
+(defun betweenp (a b c)
+	(cond
+		((< b a) (< a c))
+		((< c a) (< a b))
+	)
+)
+
+; AND/OR
+(defun betweenp (a b c)
+	(or (and (< b a) (< a c))
+		(and (< c a) (< a b))
+	)
+)
+\end{lstlisting}
+
+\clearpage
+
+\section{Задание 9}
+
+Переписать функцию \texttt{how-alike}, приведенную в лекции и использующую \texttt{COND}, используятолько конструкции \texttt{IF}, \texttt{AND}/\texttt{OR}.

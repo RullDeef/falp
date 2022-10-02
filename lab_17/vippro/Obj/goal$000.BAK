@@ -1,0 +1,22 @@
+domains
+	num = integer
+	elemList = num*
+
+predicates
+	length(num, elemList).
+	summ(num, elemList).
+
+clauses
+	length(0, []) :- !.
+	length(R, [_|T]) :-
+		length(R_1, T),
+		R = R_1 + 1.
+	
+	summ(0, []) :- !.
+	summ(R, [R]) :- !.
+	summ(R, [H|T]) :-
+		summ(R1, T),
+		R = H + R1.
+
+goal
+	summ(R, [1, 2, 3, 4, 5]).
